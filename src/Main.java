@@ -19,10 +19,15 @@ public class Main {
             selectChoice(choice);
 
         } while (choice != 0);
+
+        System.out.println("Chương trình kết thúc");
     }
 
     private static void selectChoice(int choice) {
-        switch (choice){
+
+        //viêt một regex cho việc chọn string
+
+        switch (choice) {
             case 1:
                 System.out.println("1");
                 break;
@@ -32,6 +37,10 @@ public class Main {
             case 3:
                 System.out.println("3");
                 break;
+            case 0:
+                break;
+            default:
+                System.out.println("Lựa chọn sai, yêu cầu lựa chọn lại lần nữa\n");
         }
     }
 }
