@@ -46,3 +46,4 @@ public class Customer {
                 '}';
     }
 }
+// đây cũng là 1 comment ẩn

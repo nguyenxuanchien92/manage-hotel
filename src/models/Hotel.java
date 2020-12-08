@@ -57,3 +57,4 @@ public class Hotel {
                 '}';
     }
 }
+// đây là 1 comment ẩn khác

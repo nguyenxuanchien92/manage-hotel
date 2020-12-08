@@ -3,7 +3,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
-    private final static String REGEX_PATTERN = "[0-9]+";
+    private final static String REGEX_PATTERN = "^[0-9]+$";
 
     public static void main(String[] args) {
         createMenu();
@@ -25,7 +25,7 @@ public class Main {
                 int val =Integer.valueOf(choice);
                 selectChoice(val);
             } else {
-                System.out.println("Bạn nhập dạng sai dạng dữ liệu");
+                System.out.println("Bạn nhập dạng sai dạng dữ liệu\n");
 
                 choice = - 1 + "";
             }
@@ -61,3 +61,4 @@ public class Main {
         return matcher.matches();
     }
 }
+// đây cũng có thể là 1 comment ẳn
