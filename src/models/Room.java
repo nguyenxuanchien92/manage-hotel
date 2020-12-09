@@ -8,12 +8,13 @@ public class Room {
     private String dayOfAccommodation;
     private boolean isRent;
     private Customer customer;
+    private static int count = 0;
 
-    public Room(long priceRoom, TypeRoom typeRoom, String dayOfAccommodation, boolean isRent) {
+    public Room(long priceRoom, TypeRoom typeRoom, String dayOfAccommodation) {
         this.priceRoom = priceRoom;
         this.typeRoom = typeRoom;
         this.dayOfAccommodation = dayOfAccommodation;
-        this.isRent = isRent;
+        this.isRent = true;
         this.idRoom = randomIdRoom();
     }
 
@@ -49,13 +50,16 @@ public class Room {
         return isRent;
     }
 
-    public void setRent(boolean rent) {
-        isRent = rent;
-    }
+//    public void setRent(boolean rent) {
+//        isRent = rent;
+//    }
 
     private String randomIdRoom() {
-        int val = Integer.parseInt(String.valueOf(Math.floor(Math.random() * RANGEROOM + 1)));
-        return String.valueOf(val);
+        count++;
+        if (count <= RANGEROOM) {
+            return count + "";
+        }
+        return - 1 + "";
     }
 
     @Override

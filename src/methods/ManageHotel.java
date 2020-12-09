@@ -3,6 +3,7 @@ package methods;
 import models.Customer;
 import models.Hotel;
 import models.Room;
+import models.TypeRoom;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,43 +13,48 @@ import java.util.regex.Pattern;
 
 public class ManageHotel {
     private Scanner sc;
+    private static HashMap hashMap = null;
 
     public void createRoom() throws ParseException {
         sc = new Scanner(System.in);
-
-        HashMap hashMap = initDataCustomer(sc);
-
-        // lấy các giá trị cần cho việc validate
-//        boolean resultDOB = false;
-//        boolean resultUserId = false;
-//        Set<String> keys = hashMap.keySet();
-//        for (String key : keys) {
-//            if (key.equals("dobCustomer")) {
-//                resultDOB = isDOB((String) hashMap.get(key));
-//            }
-//            if (key.equals("userId")) {
-//                resultUserId = isUserId((String) hashMap.get(key));
-//            }
-//        }
-
-//        boolean resultDOB = isDOB(map.k);
-//        boolean resultUserId = isUserId(userId);
+        hashMap = initDataCustomer(sc);
+        Hotel hotel = null;
 
 
-//        if (resultDOB || resultUserId) {
-//
-//            Hotel hotel = new Hotel();
-//
-//            System.out.println();
-//        } else {
-//            System.out.println("bạn nhập sai dạng dữ liệu DOB or User Id");
-//        }
+        String dobCustomer = (String) hashMap.get("dobCustomer");
+        String userId = (String) hashMap.get("userId");
+        String nameCustomer = (String) hashMap.get("nameCustomer");
+        TypeRoom typeRoom = (TypeRoom) hashMap.get("typeRoom");
+        String dateOfRent = (String) hashMap.get("dateOfRent");
 
+        boolean result = checkValidate(dobCustomer, userId);
+
+        if (result) {
+            // demo create data hotel
+            Customer customer = new Customer(nameCustomer, dobCustomer, userId);
+            Room room = new Room(2000, typeRoom, dateOfRent);
+            hotel = new Hotel(customer, room);
+        } else {
+            System.out.println("Bạn nhập sai định dạng DOB hoặc user id");
+        }
+
+        System.out.println(hotel);
+    }
+
+    private boolean checkValidate(String dob, String userId) {
+
+        boolean resultDob = isValidateDOB(dob);
+        boolean resultUserId = isValidateUserId(userId);
+
+        if (resultDob && resultUserId) {
+            return true;
+        }
+        return false;
     }
 
     private HashMap initDataCustomer(Scanner sc) {
 
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<Object, Object> hashMap = new HashMap<>();
 
         System.out.println("Nhập thông tin khách hàng");
         System.out.println("Tên khách hàng");
@@ -59,8 +65,9 @@ public class ManageHotel {
         String userId = sc.nextLine();
         System.out.print("Loại phòng: ");
         String typeRoom = sc.nextLine();
-        System.out.print("Giá phòng: ");
-        String priceRoom = sc.nextLine();
+
+        TypeRoom valType = selectTypeRoom(typeRoom);
+
         System.out.print("Số ngày thuê trọ của khách:");
         String dateOfRent = sc.nextLine();
 
@@ -69,11 +76,22 @@ public class ManageHotel {
         hashMap.put("nameCustomer", nameCustomer);
         hashMap.put("dobCustomer", dobCustomer);
         hashMap.put("userId", userId);
-        hashMap.put("typeRoom", typeRoom);
-        hashMap.put("priceRoom", priceRoom);
+        hashMap.put("typeRoom", valType);
+//        hashMap.put("priceRoom", priceRoom);
+
+
         hashMap.put("dateOfRent", dateOfRent);
 
         return hashMap;
+    }
+
+    private TypeRoom selectTypeRoom(String typeRoom) {
+        String val = typeRoom.toUpperCase();
+        switch (val) {
+            case "VIP":
+                return TypeRoom.VIP;
+        }
+        return TypeRoom.ECONOMY;
     }
 
     private boolean isValidateDOB(String dob) {
@@ -88,7 +106,7 @@ public class ManageHotel {
     }
 
     private boolean isValidateUserId(String userId) {
-        String patternUserId = "^(?!\\d+$)\\w{8,20}$";
+        String patternUserId = "\\d+";
 
         Pattern pattern = Pattern.compile(patternUserId);
         Matcher matcher = pattern.matcher(userId);

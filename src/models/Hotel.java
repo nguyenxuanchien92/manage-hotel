@@ -25,4 +25,12 @@ public class Hotel {
     public void setRoom(Room room) {
         this.room = room;
     }
+
+    @Override
+    public String toString() {
+        return "Hotel{" +
+                "customer=" + customer +
+                ", room=" + room +
+                '}';
+    }
 }
