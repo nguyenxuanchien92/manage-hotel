@@ -1,6 +1,11 @@
 package models;
 
 public enum TypeRoom {
-    VIP,ECONOMY
+    VIP(20000), ECONOMY(5000);
+
+    public final long value;
+
+    TypeRoom(long value) {
+        this.value = value;
+    }
 }
-// đây là 1 comment ẩn

@@ -9,13 +9,12 @@ public class Room {
     private boolean isRent;
     private Customer customer;
 
-    public Room(long priceRoom, TypeRoom typeRoom, String dayOfAccommodation, boolean isRent, Customer customer) {
+    public Room(long priceRoom, TypeRoom typeRoom, String dayOfAccommodation, boolean isRent) {
         this.priceRoom = priceRoom;
         this.typeRoom = typeRoom;
         this.dayOfAccommodation = dayOfAccommodation;
         this.isRent = isRent;
         this.idRoom = randomIdRoom();
-        this.customer = customer;
     }
 
     public String getIdRoom() {
@@ -52,14 +51,6 @@ public class Room {
 
     public void setRent(boolean rent) {
         isRent = rent;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     private String randomIdRoom() {
