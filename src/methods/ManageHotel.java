@@ -32,7 +32,16 @@ public class ManageHotel {
         if (result) {
             // demo create data hotel
             Customer customer = new Customer(nameCustomer, dobCustomer, userId);
-            Room room = new Room(2000, typeRoom, dateOfRent);
+            Room room = null;
+
+            switch (typeRoom.name()) {
+                case "VIP":
+                    room = new Room(TypeRoom.VIP.value, typeRoom, dateOfRent);
+                    break;
+                case "ECONOMY":
+                    room = new Room(TypeRoom.ECONOMY.value, typeRoom, dateOfRent);
+                    break;
+            }
             hotel = new Hotel(customer, room);
         } else {
             System.out.println("Bạn nhập sai định dạng DOB hoặc user id");
