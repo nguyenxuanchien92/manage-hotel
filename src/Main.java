@@ -1,3 +1,6 @@
+import methods.ManageHotel;
+
+import java.text.ParseException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -5,11 +8,11 @@ import java.util.regex.Pattern;
 public class Main {
     private final static String REGEX_PATTERN = "^[0-9]+$";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         createMenu();
     }
 
-    private static void createMenu() {
+    private static void createMenu() throws ParseException {
         String choice = "";
 
         do {
@@ -35,11 +38,12 @@ public class Main {
         System.out.println("Chương trình kết thúc");
     }
 
-    private static void selectChoice(int choice) {
+    private static void selectChoice(int choice) throws ParseException {
 
         switch (choice) {
             case 1:
-                System.out.println("1");
+                ManageHotel manageHotel = new ManageHotel();
+                manageHotel.createRoom();
                 break;
             case 2:
                 System.out.println("2");

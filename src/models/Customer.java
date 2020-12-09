@@ -4,10 +4,10 @@ import java.util.Date;
 
 public class Customer {
     private String name;
-    private Date dob;
+    private String dob;
     private long userId;
 
-    public Customer(String name, Date dob, long userId) {
+    public Customer(String name, String dob, long userId) {
         this.name = name;
         this.dob = dob;
         this.userId = userId;
@@ -21,11 +21,11 @@ public class Customer {
         this.name = name;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
