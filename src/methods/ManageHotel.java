@@ -5,21 +5,22 @@ import models.Hotel;
 import models.Room;
 import models.TypeRoom;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ManageHotel {
     private Scanner sc;
-    private static HashMap hashMap = null;
+    private static HashMap hashMap = new HashMap();
+    private static final String NAME_FILE = "ListCustomer.csv";
 
-    public void createRoom() throws ParseException {
+    public void createRoom() {
         sc = new Scanner(System.in);
         hashMap = initDataCustomer(sc);
-        Hotel hotel = null;
-
+        Hotel hotelCustomer = null;
 
         String dobCustomer = (String) hashMap.get("dobCustomer");
         String userId = (String) hashMap.get("userId");
@@ -42,12 +43,36 @@ public class ManageHotel {
                     room = new Room(TypeRoom.ECONOMY.value, typeRoom, dateOfRent);
                     break;
             }
-            hotel = new Hotel(customer, room);
+            hotelCustomer = new Hotel(customer, room);
         } else {
             System.out.println("Bạn nhập sai định dạng DOB hoặc user id");
         }
 
-        System.out.println(hotel);
+        System.out.println(hotelCustomer);
+        //ghi ra file csv
+        writeFile(hashMap, NAME_FILE);
+
+    }
+
+    private void writeFile(HashMap hashMap, String fileName) {
+        boolean result = createFile(fileName);
+        if (result) {
+
+        }
+    }
+
+    private boolean createFile(String fileName) {
+
+        File file = new File(fileName);
+        if (file.exists()) {
+            try {
+                file.createNewFile();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     private boolean checkValidate(String dob, String userId) {
