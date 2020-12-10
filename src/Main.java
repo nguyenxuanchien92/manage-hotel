@@ -29,7 +29,6 @@ public class Main {
                 selectChoice(val);
             } else {
                 System.out.println("Bạn nhập dạng sai dạng dữ liệu\n");
-
                 choice = - 1 + "";
             }
 

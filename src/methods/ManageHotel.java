@@ -6,6 +6,7 @@ import models.Room;
 import models.TypeRoom;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -14,19 +15,23 @@ import java.util.regex.Pattern;
 
 public class ManageHotel {
     private Scanner sc;
-    private static HashMap hashMap = new HashMap();
+    private static Map map = new HashMap();
     private static final String NAME_FILE = "ListCustomer.csv";
+    private static List<Hotel> listCustomer = new ArrayList<>();
+    private static final String COMMA_DELIMITER = ",";
+    private static final String NEW_LINE_SEPARATOR = "\n";
+    private static final String FILE_HEADER = "Room, TypeRoom, Customer, PriceRoom, UserId";
 
     public void createRoom() {
         sc = new Scanner(System.in);
-        hashMap = initDataCustomer(sc);
+        map = initDataCustomer(sc);
         Hotel hotelCustomer = null;
 
-        String dobCustomer = (String) hashMap.get("dobCustomer");
-        String userId = (String) hashMap.get("userId");
-        String nameCustomer = (String) hashMap.get("nameCustomer");
-        TypeRoom typeRoom = (TypeRoom) hashMap.get("typeRoom");
-        String dateOfRent = (String) hashMap.get("dateOfRent");
+        String dobCustomer = (String) map.get("dobCustomer");
+        String userId = (String) map.get("userId");
+        String nameCustomer = (String) map.get("nameCustomer");
+        TypeRoom typeRoom = (TypeRoom) map.get("typeRoom");
+        String dateOfRent = (String) map.get("dateOfRent");
 
         boolean result = checkValidate(dobCustomer, userId);
 
@@ -44,35 +49,62 @@ public class ManageHotel {
                     break;
             }
             hotelCustomer = new Hotel(customer, room);
+            listCustomer.add(hotelCustomer);
         } else {
             System.out.println("Bạn nhập sai định dạng DOB hoặc user id");
         }
 
         System.out.println(hotelCustomer);
         //ghi ra file csv
-        writeFile(hashMap, NAME_FILE);
+        writeFile(listCustomer, NAME_FILE);
 
     }
 
-    private void writeFile(HashMap hashMap, String fileName) {
-        boolean result = createFile(fileName);
-        if (result) {
+    private void writeFile(List<Hotel> listCustomer, String fileName) {
+        createFile(fileName);
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(fileName, true);
+            for (Hotel e : listCustomer) {
+                // viết ra thông tin phòng trọ của khách hàng ra file
+                fileWriter.append(e.getRoom().getIdRoom());
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(e.getRoom().getTypeRoom().name());
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(e.getCustomer().getName());
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(e.getRoom().getPriceRoom() + "");
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(e.getCustomer().getUserId());
+                fileWriter.append(NEW_LINE_SEPARATOR);
+//                    "Room, TypeRoom, Customer, PriceRoom, UserId"
+            }
 
+            System.out.println("Data of Customer created complete!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                System.out.println("Error while flushing/closing fileWriter !!!");
+                e.printStackTrace();
+            }
         }
+
     }
 
-    private boolean createFile(String fileName) {
+    private void createFile(String fileName) {
 
         File file = new File(fileName);
-        if (file.exists()) {
+        if (! file.exists()) {
             try {
                 file.createNewFile();
-                return true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return false;
     }
 
     private boolean checkValidate(String dob, String userId) {
@@ -86,9 +118,9 @@ public class ManageHotel {
         return false;
     }
 
-    private HashMap initDataCustomer(Scanner sc) {
+    private Map initDataCustomer(Scanner sc) {
 
-        HashMap<Object, Object> hashMap = new HashMap<>();
+        Map<Object, Object> map = new HashMap<>();
 
         System.out.println("Nhập thông tin khách hàng");
         System.out.println("Tên khách hàng");
@@ -107,16 +139,16 @@ public class ManageHotel {
 
         // khởi tạo customer and room
 
-        hashMap.put("nameCustomer", nameCustomer);
-        hashMap.put("dobCustomer", dobCustomer);
-        hashMap.put("userId", userId);
-        hashMap.put("typeRoom", valType);
-//        hashMap.put("priceRoom", priceRoom);
+        map.put("nameCustomer", nameCustomer);
+        map.put("dobCustomer", dobCustomer);
+        map.put("userId", userId);
+        map.put("typeRoom", valType);
+//        map.put("priceRoom", priceRoom);
 
 
-        hashMap.put("dateOfRent", dateOfRent);
+        map.put("dateOfRent", dateOfRent);
 
-        return hashMap;
+        return map;
     }
 
     private TypeRoom selectTypeRoom(String typeRoom) {
