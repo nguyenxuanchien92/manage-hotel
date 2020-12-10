@@ -5,9 +5,7 @@ import models.Hotel;
 import models.Room;
 import models.TypeRoom;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -17,7 +15,7 @@ public class ManageHotel {
     private Scanner sc;
     private static Map map = new HashMap();
     private static final String NAME_FILE = "ListCustomer.csv";
-    private static List<Hotel> listCustomer = new ArrayList<>();
+    private final static List<Hotel> listCustomer = new ArrayList<>();
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String FILE_HEADER = "Room, TypeRoom, Customer, PriceRoom, UserId";
@@ -54,21 +52,52 @@ public class ManageHotel {
             System.out.println("Bạn nhập sai định dạng DOB hoặc user id");
         }
 
-        System.out.println(hotelCustomer);
         //ghi ra file csv
         writeFile(listCustomer, NAME_FILE);
 
     }
 
-    public void showCusInfo(){
+    public void showCusInfo() {
         // hiển thị thông tin danh sách khách hàng
+
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+        String line = null;
+        try {
+            fileReader = new FileReader(NAME_FILE);
+            bufferedReader = new BufferedReader(fileReader);
+            while ((line = bufferedReader.readLine()) != null) {
+                printCustomer(parseCsvFile(line));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> parseCsvFile(String line) {
+        List<String> list = new ArrayList<>();
+
+        if (line != null) {
+            String[] splitData = line.split(COMMA_DELIMITER);
+            for (int i = 0; i < splitData.length; i++) {
+                list.add(splitData[i]);
+            }
+        }
+
+        return list;
+    }
+
+    private void printCustomer(List<String> listCustomer) {
+        System.out.println(listCustomer);
     }
 
     private void writeFile(List<Hotel> listCustomer, String fileName) {
         createFile(fileName);
         FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(fileName, true);
+            fileWriter = new FileWriter(fileName);
             for (Hotel e : listCustomer) {
                 // viết ra thông tin phòng trọ của khách hàng ra file
                 fileWriter.append(e.getRoom().getIdRoom());
