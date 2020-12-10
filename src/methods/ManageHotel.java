@@ -12,16 +12,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ManageHotel {
-    private Scanner sc;
+    private Scanner sc = new Scanner(System.in);
     private static Map map = new HashMap();
     private static final String NAME_FILE = "ListCustomer.csv";
-    private final static List<Hotel> listCustomer = new ArrayList<>();
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String FILE_HEADER = "Room, TypeRoom, Customer, PriceRoom, UserId";
 
     public void createRoom() {
-        sc = new Scanner(System.in);
         map = initDataCustomer(sc);
         Hotel hotelCustomer = null;
 
@@ -47,22 +45,60 @@ public class ManageHotel {
                     break;
             }
             hotelCustomer = new Hotel(customer, room);
-            listCustomer.add(hotelCustomer);
         } else {
             System.out.println("Bạn nhập sai định dạng DOB hoặc user id");
         }
 
         //ghi ra file csv
-        writeFile(listCustomer, NAME_FILE);
-
+        writeFile(hotelCustomer, NAME_FILE);
     }
+
+    public void removeCustomer() {
+        System.out.print("Nhập số phòng bạn đã thuê: ");
+        String idRoom = sc.nextLine();
+        int id = Integer.parseInt(idRoom);
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(NAME_FILE);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = "";
+            List<String> listCus = new ArrayList<>();
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] lineReader=line.split(",");
+                for (int i = 0; i < lineReader.length; i++) {
+                    listCus.add(line);
+                }
+            }
+
+            for (int i = listCus.size()-1; i >=0 ; i--) {
+                if (listCus.get(i).equals("1")){
+                    listCus.remove(i+4);
+                    listCus.remove(i+3);
+                    listCus.remove(i+2);
+                    listCus.remove(i+1);
+                    listCus.remove(i);
+                }
+            }
+            System.out.println(listCus);
+            System.out.println("Đã xoá");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public void showCusInfo() {
         // hiển thị thông tin danh sách khách hàng
 
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
-        String line = null;
+        String line = "";
         try {
             fileReader = new FileReader(NAME_FILE);
             bufferedReader = new BufferedReader(fileReader);
@@ -93,25 +129,26 @@ public class ManageHotel {
         System.out.println(listCustomer);
     }
 
-    private void writeFile(List<Hotel> listCustomer, String fileName) {
+    private void writeFile(Hotel hotelCustomer, String fileName) {
         createFile(fileName);
         FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(fileName);
-            for (Hotel e : listCustomer) {
-                // viết ra thông tin phòng trọ của khách hàng ra file
-                fileWriter.append(e.getRoom().getIdRoom());
-                fileWriter.append(COMMA_DELIMITER);
-                fileWriter.append(e.getRoom().getTypeRoom().name());
-                fileWriter.append(COMMA_DELIMITER);
-                fileWriter.append(e.getCustomer().getName());
-                fileWriter.append(COMMA_DELIMITER);
-                fileWriter.append(e.getRoom().getPriceRoom() + "");
-                fileWriter.append(COMMA_DELIMITER);
-                fileWriter.append(e.getCustomer().getUserId());
-                fileWriter.append(NEW_LINE_SEPARATOR);
+            fileWriter = new FileWriter(fileName, true);
+
+            // viết ra thông tin phòng trọ của khách hàng ra file
+            fileWriter.append(hotelCustomer.getRoom().getIdRoom());
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotelCustomer.getRoom().getTypeRoom().name());
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotelCustomer.getCustomer().getName());
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotelCustomer.getRoom().getPriceRoom() + "");
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotelCustomer.getCustomer().getUserId());
+            fileWriter.append(NEW_LINE_SEPARATOR);
+            fileWriter.flush();
 //                    "Room, TypeRoom, Customer, PriceRoom, UserId"
-            }
+
 
             System.out.println("Data of Customer created complete!");
 

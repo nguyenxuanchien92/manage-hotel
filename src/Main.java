@@ -47,7 +47,7 @@ public class Main {
                 manageHotel.showCusInfo();
                 break;
             case 3:
-                System.out.println("3");
+                manageHotel.removeCustomer();
                 break;
             case 0:
                 break;
