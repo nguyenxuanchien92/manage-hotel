@@ -10,12 +10,21 @@ public class Room {
     private Customer customer;
     private static int count = 0;
 
-    public Room(long priceRoom, TypeRoom typeRoom, String dayOfAccommodation) {
+    public Room(long priceRoom, TypeRoom typeRoom, String dayOfAccommodation,Customer custommer) {
         this.priceRoom = priceRoom;
         this.typeRoom = typeRoom;
         this.dayOfAccommodation = dayOfAccommodation;
+        this.customer = custommer;
         this.isRent = true;
         this.idRoom = randomIdRoom();
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getIdRoom() {
@@ -24,10 +33,6 @@ public class Room {
 
     public long getPriceRoom() {
         return priceRoom;
-    }
-
-    public void setPriceRoom(long priceRoom) {
-        this.priceRoom = priceRoom;
     }
 
     public TypeRoom getTypeRoom() {

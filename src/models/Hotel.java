@@ -2,21 +2,14 @@ package models;
 
 public class Hotel {
 
-    private Customer customer;
+
     private Room room;
 
-    public Hotel(Customer customer, Room room) {
-        this.customer = customer;
+    public Hotel(Room room) {
+
         this.room = room;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
 
     public Room getRoom() {
         return room;
@@ -29,7 +22,7 @@ public class Hotel {
     @Override
     public String toString() {
         return "Hotel{" +
-                "customer=" + customer +
+
                 ", room=" + room +
                 '}';
     }

@@ -38,13 +38,13 @@ public class ManageHotel {
 
             switch (typeRoom.name()) {
                 case "VIP":
-                    room = new Room(TypeRoom.VIP.value, typeRoom, dateOfRent);
+                    room = new Room(TypeRoom.VIP.value, typeRoom, dateOfRent, customer);
                     break;
                 case "ECONOMY":
-                    room = new Room(TypeRoom.ECONOMY.value, typeRoom, dateOfRent);
+                    room = new Room(TypeRoom.ECONOMY.value, typeRoom, dateOfRent, customer);
                     break;
             }
-            hotelCustomer = new Hotel(customer, room);
+            hotelCustomer = new Hotel(room);
         } else {
             System.out.println("Bạn nhập sai định dạng DOB hoặc user id");
         }
@@ -54,42 +54,7 @@ public class ManageHotel {
     }
 
     public void removeCustomer() {
-        System.out.print("Nhập số phòng bạn đã thuê: ");
-        String idRoom = sc.nextLine();
-        int id = Integer.parseInt(idRoom);
-        FileReader fileReader = null;
-        try {
-            fileReader = new FileReader(NAME_FILE);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String line = "";
-            List<String> listCus = new ArrayList<>();
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] lineReader=line.split(",");
-                for (int i = 0; i < lineReader.length; i++) {
-                    listCus.add(line);
-                }
-            }
-
-            for (int i = listCus.size()-1; i >=0 ; i--) {
-                if (listCus.get(i).equals("1")){
-                    listCus.remove(i+4);
-                    listCus.remove(i+3);
-                    listCus.remove(i+2);
-                    listCus.remove(i+1);
-                    listCus.remove(i);
-                }
-            }
-            System.out.println(listCus);
-            System.out.println("Đã xoá");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fileReader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        // ...
     }
 
 
@@ -140,11 +105,11 @@ public class ManageHotel {
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(hotelCustomer.getRoom().getTypeRoom().name());
             fileWriter.append(COMMA_DELIMITER);
-            fileWriter.append(hotelCustomer.getCustomer().getName());
+            fileWriter.append(hotelCustomer.getRoom().getCustomer().getName());
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(hotelCustomer.getRoom().getPriceRoom() + "");
             fileWriter.append(COMMA_DELIMITER);
-            fileWriter.append(hotelCustomer.getCustomer().getUserId());
+            fileWriter.append(hotelCustomer.getRoom().getCustomer().getUserId());
             fileWriter.append(NEW_LINE_SEPARATOR);
             fileWriter.flush();
 //                    "Room, TypeRoom, Customer, PriceRoom, UserId"
