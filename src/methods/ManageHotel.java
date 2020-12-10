@@ -6,6 +6,7 @@ import models.Room;
 import models.TypeRoom;
 
 import java.io.*;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -18,7 +19,7 @@ public class ManageHotel {
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String FILE_HEADER = "Room, TypeRoom, Customer, PriceRoom, UserId";
-
+    private static final List<Hotel> list = new ArrayList<>();
     public void createRoom() {
         map = initDataCustomer(sc);
         Hotel hotelCustomer = null;
@@ -54,7 +55,18 @@ public class ManageHotel {
     }
 
     public void removeCustomer() {
-        // ...
+        System.out.println("Thônt tin danh sách khách hàng thuê phòng:");
+        showCusInfo();
+        System.out.print("Nhập thông tin phòng(Room Id): ");
+        int id = Integer.valueOf(sc.nextLine());
+
+        boolean result = list.contains(list.get(id));
+        System.out.println("size list before remove:"+list.size());
+        if(result){
+            list.remove(list.get(id));
+        }
+        System.out.println("size list after remove:"+list.size());
+        System.out.println(list);
     }
 
 
@@ -70,6 +82,7 @@ public class ManageHotel {
             while ((line = bufferedReader.readLine()) != null) {
                 printCustomer(parseCsvFile(line));
             }
+            fileReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -77,20 +90,24 @@ public class ManageHotel {
         }
     }
 
-    private List<String> parseCsvFile(String line) {
-        List<String> list = new ArrayList<>();
-
+    private List<Hotel> parseCsvFile(String line) {
         if (line != null) {
             String[] splitData = line.split(COMMA_DELIMITER);
-            for (int i = 0; i < splitData.length; i++) {
-                list.add(splitData[i]);
-            }
+            String roomId = splitData[0];
+            TypeRoom typeRoom = TypeRoom.valueOf(splitData[1]);
+            String nameCustomer = splitData[2];
+            long priceRoom = Long.valueOf(splitData[3]);
+            String userId = splitData[4];
+
+            Room room = new Room(roomId,priceRoom,typeRoom,new Customer(userId,nameCustomer));
+            Hotel hotelCustomer = new Hotel(room);
+            list.add(hotelCustomer);
         }
 
         return list;
     }
 
-    private void printCustomer(List<String> listCustomer) {
+    private void printCustomer(List<Hotel> listCustomer) {
         System.out.println(listCustomer);
     }
 
@@ -112,7 +129,7 @@ public class ManageHotel {
             fileWriter.append(hotelCustomer.getRoom().getCustomer().getUserId());
             fileWriter.append(NEW_LINE_SEPARATOR);
             fileWriter.flush();
-//                    "Room, TypeRoom, Customer, PriceRoom, UserId"
+//          "Room, TypeRoom, Customer, PriceRoom, UserId"
 
 
             System.out.println("Data of Customer created complete!");

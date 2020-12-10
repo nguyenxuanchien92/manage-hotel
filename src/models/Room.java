@@ -19,6 +19,13 @@ public class Room {
         this.idRoom = randomIdRoom();
     }
 
+    public Room(String idRoom, long priceRoom, TypeRoom typeRoom, Customer customer) {
+        this.idRoom = idRoom;
+        this.priceRoom = priceRoom;
+        this.typeRoom = typeRoom;
+        this.customer = customer;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -75,6 +82,7 @@ public class Room {
                 ", typeRoom=" + typeRoom +
                 ", dayOfAccommodation='" + dayOfAccommodation + '\'' +
                 ", isRent=" + isRent +
+                ", customer=" + customer +
                 '}';
     }
 }

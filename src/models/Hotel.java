@@ -22,8 +22,7 @@ public class Hotel {
     @Override
     public String toString() {
         return "Hotel{" +
-
-                ", room=" + room +
+                "room=" + room +
                 '}';
     }
 }

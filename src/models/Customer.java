@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Currency;
 import java.util.Date;
 
 public class Customer {
@@ -11,6 +12,11 @@ public class Customer {
         this.name = name;
         this.dob = dob;
         this.userId = userId;
+    }
+
+    public Customer(String userId, String name) {
+        this.userId = userId;
+        this.name = name;
     }
 
     public String getName() {
