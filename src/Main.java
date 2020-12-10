@@ -38,14 +38,13 @@ public class Main {
     }
 
     private static void selectChoice(int choice) throws ParseException {
-
+        ManageHotel manageHotel = new ManageHotel();
         switch (choice) {
             case 1:
-                ManageHotel manageHotel = new ManageHotel();
                 manageHotel.createRoom();
                 break;
             case 2:
-                System.out.println("2");
+                manageHotel.showCusInfo();
                 break;
             case 3:
                 System.out.println("3");

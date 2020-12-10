@@ -60,6 +60,10 @@ public class ManageHotel {
 
     }
 
+    public void showCusInfo(){
+        // hiển thị thông tin danh sách khách hàng
+    }
+
     private void writeFile(List<Hotel> listCustomer, String fileName) {
         createFile(fileName);
         FileWriter fileWriter = null;
