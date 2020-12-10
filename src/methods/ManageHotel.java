@@ -215,3 +215,4 @@ public class ManageHotel {
         return false;
     }
 }
+// xử lý listCustomer
