@@ -4,6 +4,7 @@ public class Hotel {
 
 
     private Room room;
+    public Hotel(){}
 
     public Hotel(Room room) {
 

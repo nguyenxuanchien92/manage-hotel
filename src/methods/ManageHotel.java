@@ -19,7 +19,8 @@ public class ManageHotel {
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String FILE_HEADER = "Room, TypeRoom, Customer, PriceRoom, UserId";
-    private static final List<Hotel> list = new ArrayList<>();
+//    private static final List<Hotel> list = new ArrayList<>();
+
     public void createRoom() {
         map = initDataCustomer(sc);
         Hotel hotelCustomer = null;
@@ -60,19 +61,58 @@ public class ManageHotel {
         System.out.print("Nhập thông tin phòng(Room Id): ");
         int id = Integer.valueOf(sc.nextLine());
 
-        boolean result = list.contains(list.get(id));
-        System.out.println("size list before remove:"+list.size());
+        List<Hotel> list = readFileCsv();
+        boolean result = list.contains(list.get(id-1));
         if(result){
-            list.remove(list.get(id));
+            System.out.println(list.get(id-1));
+            list.remove(list.get(id-1));
+            //update lại file...
+            if(list.size() == 0){
+                Hotel empty = new Hotel();
+                updateFile(empty,NAME_FILE);
+            }
+            for(Hotel e : list)
+                updateFile(e,NAME_FILE);
         }
-        System.out.println("size list after remove:"+list.size());
-        System.out.println(list);
+
     }
 
+    private void updateFile(Hotel  hotel,String fileName){
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(fileName);
 
-    public void showCusInfo() {
-        // hiển thị thông tin danh sách khách hàng
+            // viết ra thông tin phòng trọ của khách hàng ra file
+            fileWriter.append(hotel.getRoom().getIdRoom());
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotel.getRoom().getTypeRoom().name());
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotel.getRoom().getCustomer().getName());
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotel.getRoom().getPriceRoom() + "");
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(hotel.getRoom().getCustomer().getUserId());
+            fileWriter.append(NEW_LINE_SEPARATOR);
+            fileWriter.flush();
+//          "Room, TypeRoom, Customer, PriceRoom, UserId"
 
+
+            System.out.println("Data of Customer created complete!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                System.out.println("Error while flushing/closing fileWriter !!!");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private List<Hotel> readFileCsv() {
+        List<Hotel> list = new ArrayList<>();
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
         String line = "";
@@ -80,36 +120,43 @@ public class ManageHotel {
             fileReader = new FileReader(NAME_FILE);
             bufferedReader = new BufferedReader(fileReader);
             while ((line = bufferedReader.readLine()) != null) {
-                printCustomer(parseCsvFile(line));
+                list.addAll(parseCsvFile(line));
             }
-            fileReader.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                fileReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        return list;
+    }
+
+    public void showCusInfo() {
+        System.out.println(readFileCsv());
     }
 
     private List<Hotel> parseCsvFile(String line) {
-        if (line != null) {
-            String[] splitData = line.split(COMMA_DELIMITER);
-            String roomId = splitData[0];
-            TypeRoom typeRoom = TypeRoom.valueOf(splitData[1]);
-            String nameCustomer = splitData[2];
-            long priceRoom = Long.valueOf(splitData[3]);
-            String userId = splitData[4];
+        List<Hotel> list = new ArrayList<>();
+        String[] splitData = line.split(COMMA_DELIMITER);
+        String roomId = splitData[0];
+        TypeRoom typeRoom = TypeRoom.valueOf(splitData[1]);
+        String nameCustomer = splitData[2];
+        long priceRoom = Long.valueOf(splitData[3]);
+        String userId = splitData[4];
 
-            Room room = new Room(roomId,priceRoom,typeRoom,new Customer(userId,nameCustomer));
-            Hotel hotelCustomer = new Hotel(room);
-            list.add(hotelCustomer);
-        }
+        Room room = new Room(roomId, priceRoom, typeRoom, new Customer(userId, nameCustomer));
+        Hotel hotelCustomer = new Hotel(room);
+        list.add(hotelCustomer);
 
         return list;
     }
 
-    private void printCustomer(List<Hotel> listCustomer) {
-        System.out.println(listCustomer);
-    }
 
     private void writeFile(Hotel hotelCustomer, String fileName) {
         createFile(fileName);
